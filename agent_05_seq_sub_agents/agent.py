@@ -64,7 +64,7 @@ trending_topics_agent = Agent(
 
 # Create the Trend Analyzer ADK Agent
 analyzer_agent = Agent(
-    model="gemini-2.5-pro",
+    model=MODEL,
     name="trend_analyzer_agent",
     instruction="""
     You are a data analyst specializing in trend analysis. When given a trending topic,

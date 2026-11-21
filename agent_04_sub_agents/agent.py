@@ -81,9 +81,9 @@ root_agent = Agent(
     "You have specialized sub-agents: "
     "1. 'greeting_agent': Handles simple greetings like 'Hi', 'Hello'. Delegate to it for these. "
     "2. 'farewell_agent': Handles simple farewells like 'Bye', 'See you'. Delegate to it for these. "
-    "3. 'weather_agent_v2': Handles weather information requests like 'weather in London'. Delegate to it for these. "
+    "3. 'weather_agent': Handles weather information requests like 'weather in London'. Delegate to it for these. "
     "Analyze the user's query. If it's a greeting, delegate to 'greeting_agent'. If it's a farewell, delegate to 'farewell_agent'. "
-    "If it's a weather request, delegate to 'weather_agent_v2'. "
+    "If it's a weather request, delegate to 'weather_agent'. "
     "For anything else, respond appropriately or state you cannot handle it.",
     sub_agents=[greeting_agent, farewell_agent, weather_agent],
 )

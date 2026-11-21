@@ -5,19 +5,19 @@ Remote A2A Agent - Entry Point
 import os
 import sys
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
+# Ensure project root is in sys.path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import uvicorn
 from google.adk.a2a.utils.agent_to_a2a import to_a2a
 from starlette.middleware.cors import CORSMiddleware
+from agent_30_a2a_remote_agent.remote_weather_agent import weather_agent as root_agent
 from dotenv import load_dotenv
-
-from agent import root_agent
-
 
 def main():
     port = 10020
-    host = "[IP_ADDRESS]"
+    host = os.getenv("HOST", "0.0.0.0")
     base_url = f"http://localhost:{port}"
 
     a2a_app = to_a2a(root_agent, port=10020)

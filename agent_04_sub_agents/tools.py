@@ -36,9 +36,9 @@ def get_weather(city: str) -> dict:
             "status": "success",
             "report": "The weather in New York is sunny with a temperature of 25°C.",
         },
-        "london": {
+        "dublin": {
             "status": "success",
-            "report": "It's cloudy in London with a temperature of 15°C.",
+            "report": "It's cloudy in Dublin with a temperature of 15°C.",
         },
         "tokyo": {
             "status": "success",
@@ -54,6 +54,10 @@ def get_weather(city: str) -> dict:
             "error_message": f"Sorry, I don't have weather information for '{city}'.",
         }
 
+def get_location() -> str:
+    """Provides a current Location."""
+    print(f"--- Tool: get_location called ---")
+    return "Dublin, Ireland"
 
 def say_hello(name: str = "there") -> str:
     """Provides a simple greeting, optionally addressing the user by name.

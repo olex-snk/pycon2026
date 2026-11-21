@@ -16,6 +16,15 @@ from dotenv import load_dotenv
 from google.adk.agents import Agent
 from google.adk.a2a.utils.agent_to_a2a import to_a2a
 import os
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
+import uvicorn
+from google.adk.a2a.utils.agent_to_a2a import to_a2a
+from starlette.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+
 # Load environment variables from .env file
 try:    
     env_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env")
@@ -24,7 +33,7 @@ try:
 except Exception as e:
     print(f"Error loading .env file: {e}")
 
-MODEL = "gemini-2.5-flash"
+MODEL = os.getenv("ADK_MODEL", "gemini-3.8-flash")
 
 def get_weather(city: str) -> dict:
     """Retrieves the current weather report for a specified city.
@@ -49,9 +58,9 @@ def get_weather(city: str) -> dict:
             "status": "success",
             "report": "The weather in New York is sunny with a temperature of 25°C.",
         },
-        "london": {
+        "dublin": {
             "status": "success",
-            "report": "It's cloudy in London with a temperature of 15°C.",
+            "report": "It's cloudy in Dublin with a temperature of 15°C.",
         },
         "tokyo": {
             "status": "success",
@@ -76,7 +85,39 @@ weather_agent = Agent(
     "Do not perform any other actions.",
     tools=[get_weather],
 )
-root_agent = weather_agent
+#root_agent = weather_agent
 
 # Make the agent A2A-compatible
-a2a_app = to_a2a(root_agent, port=10020)
+# a2a_app = to_a2a(root_agent, port=10020)
+
+#from agent import root_agent
+a2a_app = to_a2a(weather_agent, port=10020)
+
+def main():
+    port = 10020
+    host = "[IP_ADDRESS]"
+    base_url = f"http://localhost:{port}"
+
+    # Make the agent A2A-compatible
+    #a2a_app = to_a2a(weather_agent, port=10020)
+
+    a2a_app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
+    uvicorn.run(a2a_app, host=host, port=port)
+
+
+if __name__ == "__main__":
+  # Load environment variables from .env file
+  try:    
+      env_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env")
+      print(f"Loading .env from {env_file}")
+      load_dotenv(dotenv_path=env_file)
+  except Exception as e:
+      print(f"Error loading .env file: {e}")
+  main()

@@ -17,7 +17,7 @@ import os
 
 MODEL = os.getenv("ADK_MODEL", "gemini-3.8-flash")
 
-from .tools import get_weather, say_goodbye, say_hello
+from .tools import get_weather, say_goodbye, say_hello, get_location
 
 # --- Greeting Agent ---
 greeting_agent = Agent(
@@ -43,14 +43,34 @@ farewell_agent = Agent(
     tools=[say_goodbye],
 )
 
-weather_agent = Agent(
-    name="weather_agent_v2",  # Give it a new version name
+weather_api_agent = Agent(
+    name="weather_api_agent",
     model=MODEL,
     description="Handles weather information requests using the 'get_weather' tool.",
-    instruction="You are the Weather Agent. Your primary responsibility is to provide weather information. "
+    instruction="You are the Weather API Agent. Your primary responsibility is to provide weather information. "
     "Use the 'get_weather' tool for weather requests (e.g., 'weather in London'). "
     "Do not perform any other actions.",
     tools=[get_weather],
+)
+
+location_agent = Agent(
+    name="location_agent",
+    model=MODEL,
+    description="Handles weather information requests using the 'get_location' tool.",
+    instruction="You are the Weather Agent. Your primary responsibility is to provide weather information. "
+    "Use the 'get_weather' tool for weather requests (e.g., 'weather in London'). "
+    "Do not perform any other actions.",
+    tools=[get_location],
+)
+
+weather_agent = Agent(
+    name="weather_agent",
+    model=MODEL,
+    description="Handles weather information requests by delegating to sub-agents",
+    instruction="You are the Weather Agent. Your primary responsibility is to provide weather information. "
+    "Use sub-agents: 'weather_api_agent' for weather information, 'location_agent' for location. "
+    "Do not perform any other actions.",
+    sub_agents=[weather_api_agent, location_agent],
 )
 
 root_agent = Agent(

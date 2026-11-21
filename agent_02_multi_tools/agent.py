@@ -25,18 +25,46 @@ import os
 MODEL = os.getenv("ADK_MODEL", "gemini-3.8-flash")
 
 
-def get_weather(query: str) -> str:
-    """Simulates a web search. Use it get information on weather.
+def get_weather(city: str) -> dict:
+    """Retrieves the current weather report for a specified city.
 
     Args:
-        query: A string containing the location to get weather information for.
+        city (str): The name of the city (e.g., "New York", "London", "Tokyo").
 
     Returns:
-        A string with the simulated weather information for the queried location.
+        dict: A dictionary containing the weather information.
+              Includes a 'status' key ('success' or 'error').
+              If 'success', includes a 'report' key with weather details.
+              If 'error', includes an 'error_message' key.
     """
-    if "sf" in query.lower() or "san francisco" in query.lower():
-        return "It's 60 degrees and foggy."
-    return "It's 90 degrees and sunny."
+    print(
+        f"--- Tool: get_weather called for city: {city} ---"
+    )  # Log tool execution
+    city_normalized = city.lower().replace(" ", "")  # Basic normalization
+
+    # Mock weather data
+    mock_weather_db = {
+        "newyork": {
+            "status": "success",
+            "report": "The weather in New York is sunny with a temperature of 25°C.",
+        },
+        "dublin": {
+            "status": "success",
+            "report": "It's cloudy in Dublin with a temperature of 15°C.",
+        },
+        "tokyo": {
+            "status": "success",
+            "report": "Tokyo is experiencing light rain and a temperature of 18°C.",
+        },
+    }
+
+    if city_normalized in mock_weather_db:
+        return mock_weather_db[city_normalized]
+    else:
+        return {
+            "status": "error",
+            "error_message": f"Sorry, I don't have weather information for '{city}'.",
+        }
 
 
 def get_current_time(query: str) -> str:

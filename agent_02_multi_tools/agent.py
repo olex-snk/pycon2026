@@ -66,6 +66,10 @@ def get_weather(city: str) -> dict:
             "error_message": f"Sorry, I don't have weather information for '{city}'.",
         }
 
+def get_location() -> str:
+    """Provides a current Location."""
+    print(f"--- Tool: get_location called ---")
+    return "Dublin, Ireland"
 
 def get_current_time(query: str) -> str:
     """Simulates getting the current time for a city.
@@ -76,8 +80,8 @@ def get_current_time(query: str) -> str:
     Returns:
         A string with the current time information.
     """
-    if "sf" in query.lower() or "san francisco" in query.lower():
-        tz_identifier = "America/Los_Angeles"
+    if "dublin" in query.lower() or "dublin, ireland" in query.lower():
+        tz_identifier = "Europe/Dublin"
     else:
         return f"Sorry, I don't have timezone information for query: {query}."
 
@@ -97,7 +101,7 @@ root_agent = Agent(
         retry_options=types.HttpRetryOptions(attempts=3),
     ),
     instruction="You are a helpful AI assistant designed to provide accurate and useful information.",
-    tools=[get_weather, get_current_time],
+    tools=[get_weather, get_location, get_current_time],
 )
 
 app = App(

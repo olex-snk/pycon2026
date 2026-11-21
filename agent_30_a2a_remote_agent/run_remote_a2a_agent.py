@@ -12,12 +12,12 @@ from google.adk.a2a.utils.agent_to_a2a import to_a2a
 from starlette.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
-from remote_weather_agent import root_agent
+from agent import root_agent
 
 
 def main():
     port = 10020
-    host = "0.0.0.0"
+    host = "[IP_ADDRESS]"
     base_url = f"http://localhost:{port}"
 
     a2a_app = to_a2a(root_agent, port=10020)
